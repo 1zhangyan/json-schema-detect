@@ -1,6 +1,7 @@
 package org.zhangyan;
 
 
+import java.util.Collections;
 import java.util.List;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -13,7 +14,8 @@ public class StructTreeNode implements Comparable{
     private String path;
     private boolean inList = false;
     private boolean uncertainType = false;
-    private List<StructTreeNode> children;
+
+    private List<StructTreeNode> children = Collections.emptyList();
 
     public StructTreeNode(String key) {
         this.key = key;

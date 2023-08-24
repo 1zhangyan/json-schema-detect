@@ -21,13 +21,7 @@ public class StructTree {
         return structName;
     }
 
-    public void setStructName(String structName) {
-        this.structName = structName;
-    }
-
-
-
-    public void generateTree() {
+    private void generateTree() {
         if (!Utils.isValidStr(structName) && Utils.isValidStr(exampleJsonStr)) {
              return;
         }
