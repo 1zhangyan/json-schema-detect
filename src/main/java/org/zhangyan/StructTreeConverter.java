@@ -1,7 +1,6 @@
 package org.zhangyan;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,7 +10,6 @@ import java.util.stream.Collectors;
 public class StructTreeConverter {
     //TODO: 考虑 List 且元素不同、暂不考虑
     //TODO: 类型不兼容，标记字段
-    //TODO：字段变化 取并集
     //TODO: 字段为空
 
     public static StructTree mergeTree(StructTree originTree, StructTree targetTree) {
