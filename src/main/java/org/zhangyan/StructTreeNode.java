@@ -10,34 +10,15 @@ public class StructTreeNode implements Comparable{
 
     private String key;
     private DataType type;
-
-    private int layer;
-
     private String path;
-
     private boolean inList = false;
+    private boolean uncertainType = false;
     private List<StructTreeNode> children;
-
-    public StructTreeNode() {
-
-    }
-    public StructTreeNode(String key, DataType type) {
-        this.key = key;
-        this.type = type;
-    }
 
     public StructTreeNode(String key) {
         this.key = key;
     }
 
-
-    public StructTreeNode(String key, DataType type, int layer, String path, List<StructTreeNode> children) {
-        this.key = key;
-        this.type = type;
-        this.layer = layer;
-        this.path = path;
-        this.children = children;
-    }
     public String getKey() {
         return key;
     }
@@ -52,14 +33,6 @@ public class StructTreeNode implements Comparable{
 
     public void setType(DataType type) {
         this.type = type;
-    }
-
-    public int getLayer() {
-        return layer;
-    }
-
-    public void setLayer(int layer) {
-        this.layer = layer;
     }
 
     public String getPath() {
@@ -80,7 +53,6 @@ public class StructTreeNode implements Comparable{
     public void setInList(boolean inList) {
         this.inList = inList;
     }
-
     public boolean isInList() {
         return inList;
     }
@@ -120,6 +92,13 @@ public class StructTreeNode implements Comparable{
             return getKey().compareTo(((StructTreeNode)o).getKey());
         }
         throw new RuntimeException("Not StructTreeNode Class can not compare!");
+    }
+
+    public boolean isUncertainType() {
+        return uncertainType;
+    }
+    public void setUncertainType(boolean uncertainType) {
+        this.uncertainType = uncertainType;
     }
 
     public enum DataType {

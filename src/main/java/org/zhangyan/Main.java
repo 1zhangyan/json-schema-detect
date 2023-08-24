@@ -12,6 +12,7 @@ public class Main {
     private static String arrayExample = "[[{\"fa\":21}],[]]";
 
     public static void main(String args[]) throws Exception {
+
         System.out.println(getJsonStruct(jsonExample));
 //        getJsonMapper(arrayExample);
     }
@@ -23,10 +24,7 @@ public class Main {
     }
 
     public static String getJsonStruct(String jsonStr) throws IOException {
-        StructTree tree= new StructTree("test");
-        tree.setExampleJsonStr(jsonStr);
-        tree.generateTree();
-        tree.generateSchemaStr();
+        StructTree tree= new StructTree("test",jsonStr);
         return tree.getSchemaStr();
     }
 

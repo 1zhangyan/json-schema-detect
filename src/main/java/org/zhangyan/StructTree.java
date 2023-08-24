@@ -8,20 +8,14 @@ public class StructTree {
 
     private String exampleJsonStr;
 
-    private String schemaStr;
+    private StructTreeNode rootNode;
 
-    private StructTreeNode structTreeNode;
-
-    public StructTree() {
-
-    }
-    public StructTree(String structName) {
-        this.structName = structName;
-    }
 
     public StructTree(String structName, String exampleJsonStr) {
         this.structName = structName;
         this.exampleJsonStr = exampleJsonStr;
+        generateTree();
+
     }
     public String getStructName() {
         return structName;
@@ -31,31 +25,16 @@ public class StructTree {
         this.structName = structName;
     }
 
-    public StructTreeNode getStructTreeNode() {
-        return structTreeNode;
-    }
 
-    public void setStructTreeNode(StructTreeNode structTreeNode) {
-        this.structTreeNode = structTreeNode;
-    }
 
     public void generateTree() {
         if (!Utils.isValidStr(structName) && Utils.isValidStr(exampleJsonStr)) {
              return;
         }
-        setStructTreeNode(StructTreeNodeConverter.generateTreeFromJsonExample(this.exampleJsonStr , this.structName));
+        setRootNode(StructTreeNodeConverter.generateTreeFromJsonExample(this.exampleJsonStr , this.structName));
     }
-
-    public void generateSchemaStr() {
-        setSchemaStr(StructTreeNodeConverter.generateSchemaStr(this.structTreeNode));
-    }
-
     public String getSchemaStr() {
-        return schemaStr;
-    }
-
-    public void setSchemaStr(String schemaStr) {
-        this.schemaStr = schemaStr;
+        return StructTreeNodeConverter.generateSchemaStr(this.rootNode);
     }
 
     public String getExampleJsonStr() {
@@ -64,5 +43,22 @@ public class StructTree {
 
     public void setExampleJsonStr(String exampleJsonStr) {
         this.exampleJsonStr = exampleJsonStr;
+    }
+
+    public void setRootNode(StructTreeNode rootNode) {
+        this.rootNode = rootNode;
+    }
+
+    public StructTreeNode getRootNode() {
+        return this.rootNode;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (null == o || !(o instanceof StructTree)){
+            return false;
+        }
+        StructTree target = (StructTree) o;
+        return getSchemaStr().equals(target.getSchemaStr());
     }
 }

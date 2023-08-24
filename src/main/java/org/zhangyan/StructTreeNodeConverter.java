@@ -9,9 +9,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class StructTreeNodeConverter {
-
-    //TODO: 考虑 List 且元素不同
-    //TODO: 元素字段多时取交集
+    //TODO: 考虑 List 且元素不同、暂不考虑
+    //TODO: 类型不兼容，标记字段
+    //TODO：字段变化 取并集
     private static String PATH_FORMAT = "%s.%s";
     private static int FIST_ELEMENT = 0;
     private static String BLACK_STRING = "";
@@ -73,20 +73,19 @@ public class StructTreeNodeConverter {
             try {
                 ObjectMapper mapper = new ObjectMapper();
                 JsonNode jsonNode = mapper.readTree(exampleJsonStr);
-                structTreeNode = generateTreeNode(structName, 1, jsonNode, "", false);
+                structTreeNode = generateTreeNode(structName, jsonNode, "", false);
             } catch (IOException exception) {
 
             }
         }
         return structTreeNode;
     }
-    private static StructTreeNode generateTreeNode(String key, int layer, JsonNode jsonNode, String parentPath, boolean isParentList) {
+    private static StructTreeNode generateTreeNode(String key, JsonNode jsonNode, String parentPath, boolean isParentList) {
         if (jsonNode == null) {
             return null;
         }
         StructTreeNode treeNode = new StructTreeNode(key);
         treeNode.setKey(key);
-        treeNode.setLayer(layer);
         treeNode.setType(jsonNode);
         String currentPath = BLACK_STRING;
         if (parentPath.equals(BLACK_STRING)) {
@@ -101,13 +100,13 @@ public class StructTreeNodeConverter {
             Iterator<String> iterator =  jsonNode.fieldNames();
             while (iterator.hasNext()) {
                 String field  = iterator.next();
-                StructTreeNode child = generateTreeNode(field,layer + 1, jsonNode.get(field), currentPath, false);
+                StructTreeNode child = generateTreeNode(field, jsonNode.get(field), currentPath, false);
                 children.add(child);
             }
             treeNode.setChildren(children);
         } else if (jsonNode.isArray() && jsonNode.size() > 0) {
             jsonNode.get(FIST_ELEMENT);
-            StructTreeNode child = generateTreeNode(treeNode.getKey(),layer + 1, jsonNode.get(0), currentPath, true);
+            StructTreeNode child = generateTreeNode(treeNode.getKey(), jsonNode.get(0), currentPath, true);
             treeNode.setChildren(Collections.singletonList(child));
         } else if (jsonNode.isValueNode()) {
             //
