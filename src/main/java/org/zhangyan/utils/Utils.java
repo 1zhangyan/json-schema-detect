@@ -1,4 +1,4 @@
-package org.zhangyan;
+package org.zhangyan.utils;
 
 import java.util.Collection;
 

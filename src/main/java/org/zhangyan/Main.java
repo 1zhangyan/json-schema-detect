@@ -2,6 +2,7 @@ package org.zhangyan;
 
 
 import java.io.IOException;
+import org.zhangyan.data.StructTree;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

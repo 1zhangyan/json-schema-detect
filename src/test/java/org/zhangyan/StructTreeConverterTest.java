@@ -1,6 +1,7 @@
 package org.zhangyan;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.zhangyan.converter.StructTreeConverter;
+import org.zhangyan.data.StructTree;
 
 class StructTreeConverterTest {
 

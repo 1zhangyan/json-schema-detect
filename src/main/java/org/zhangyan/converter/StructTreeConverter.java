@@ -1,4 +1,4 @@
-package org.zhangyan;
+package org.zhangyan.converter;
 
 
 import java.util.ArrayList;
@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.zhangyan.utils.Utils;
+import org.zhangyan.data.StructTree;
+import org.zhangyan.data.StructTreeNode;
 
 public class StructTreeConverter {
     //TODO: 考虑 List 且元素不同、暂不考虑
