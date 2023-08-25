@@ -1,37 +1,44 @@
 package org.zhangyan.data;
 
 
-import org.zhangyan.converter.StructTreeNodeConverter;
+import static org.zhangyan.utils.Utils.BLANCK_STRING;
+
+import org.zhangyan.service.StructTreeNodeGenerator;
 import org.zhangyan.utils.Utils;
 
 public class StructTree {
 
+    private Long id = 0L;
 
-    private String structName;
+    private String structName = BLANCK_STRING;
 
-    private String exampleJsonStr;
+    private String exampleJsonStr = BLANCK_STRING;
 
     private StructTreeNode rootNode;
 
+    public StructTree() {
 
+    }
     public StructTree(String structName, String exampleJsonStr) {
         this.structName = structName;
         this.exampleJsonStr = exampleJsonStr;
         generateTree();
-
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getStructName() {
         return structName;
     }
 
-    private void generateTree() {
-        if (!Utils.isValidStr(structName) && Utils.isValidStr(exampleJsonStr)) {
-             return;
-        }
-        setRootNode(StructTreeNodeConverter.generateTreeFromJsonExample(this.exampleJsonStr , this.structName));
-    }
-    public String getSchemaStr() {
-        return StructTreeNodeConverter.generateSchemaStr(this.rootNode);
+    public void setStructName(String structName) {
+        this.structName = structName;
     }
 
     public String getExampleJsonStr() {
@@ -50,6 +57,17 @@ public class StructTree {
         return this.rootNode;
     }
 
+    private void generateTree() {
+        if (!Utils.isValidStr(structName) && Utils.isValidStr(exampleJsonStr)) {
+            return;
+        }
+        setRootNode(StructTreeNodeGenerator.generateTreeFromJsonExample(this.exampleJsonStr , this.structName));
+    }
+
+    public String getSchemaStr() {
+        return StructTreeNodeGenerator.generateSchemaStr(this.rootNode);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (null == o || !(o instanceof StructTree)){
@@ -58,4 +76,5 @@ public class StructTree {
         StructTree target = (StructTree) o;
         return getSchemaStr().equals(target.getSchemaStr());
     }
+
 }

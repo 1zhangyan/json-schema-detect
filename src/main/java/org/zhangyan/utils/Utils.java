@@ -4,6 +4,8 @@ import java.util.Collection;
 
 public class Utils {
 
+    public static String BLANCK_STRING = "";
+
     public static boolean isValidStr(String str) {
         if (null == str || str.isEmpty()) {
             return false;

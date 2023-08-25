@@ -1,7 +1,7 @@
 package org.zhangyan;
 
 
-class StructTreeNodeConverterTest {
+class StructTreeNodeGeneratorTest {
 
     @org.junit.jupiter.api.Test
     void generateSchemaStr() {

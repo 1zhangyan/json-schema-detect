@@ -1,9 +1,9 @@
 package org.zhangyan;
 
-import org.zhangyan.converter.StructTreeConverter;
+import org.zhangyan.service.StructTreeGenerator;
 import org.zhangyan.data.StructTree;
 
-class StructTreeConverterTest {
+class StructTreeGeneratorTest {
 
     @org.junit.jupiter.api.Test
     void mergeTree() {
@@ -12,7 +12,7 @@ class StructTreeConverterTest {
         StructTree tree2= new StructTree("tree","{\"layer1-4\":278.33,\"layer1-3\":171,\"layer1-2\":[\"tea\",\"tcoco\"],\"layer1-1\":{\"layer2-3\":\"ll\",\"layer2-2\":\"cheat\",\"layer2-4\":\"heat\"}}");
         System.out.println(tree1.getSchemaStr());
         System.out.println(tree2.getSchemaStr());
-        StructTree tree3 = StructTreeConverter.mergeTree(tree1, tree2);
+        StructTree tree3 = StructTreeGenerator.mergeTree(tree1, tree2);
         System.out.println(tree3.getSchemaStr());
     }
 }

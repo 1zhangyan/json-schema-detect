@@ -1,4 +1,6 @@
-package org.zhangyan.converter;
+package org.zhangyan.service;
+
+import static org.zhangyan.utils.Utils.BLANCK_STRING;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,13 +12,9 @@ import org.zhangyan.data.StructTreeNode;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class StructTreeNodeConverter {
-    //TODO: 考虑 List 且元素不同、暂不考虑
-    //TODO: 类型不兼容，标记字段
-    //TODO：字段变化 取并集
+public class StructTreeNodeGenerator {
     private static String PATH_FORMAT = "%s.%s";
     private static int FIST_ELEMENT = 0;
-    private static String BLACK_STRING = "";
     private static String UNKNOWN_FORMAT ="\"%s\":\"unknown\"";
     private static String LIST_FORMAT = "\"%s\": [%s]";
     private static String MAP_FORMAT = "\"%s\": {%s}";
@@ -31,10 +29,10 @@ public class StructTreeNodeConverter {
 
     public static String generateSchemaStr(StructTreeNode node) {
         if (node == null || !Utils.isValidStr(node.getKey())) {
-            return BLACK_STRING;
+            return BLANCK_STRING;
         }
-        String schemaStr = BLACK_STRING;
-        String format = BLACK_STRING;
+        String schemaStr = BLANCK_STRING;
+        String format = BLANCK_STRING;
 
         if (node.getType() == null || node.getType().equals(StructTreeNode.DataType.UNKNOWN)) {
             format = node.isInList()?UNKNOWN_INLIST_FORMAT:UNKNOWN_FORMAT;
@@ -56,12 +54,12 @@ public class StructTreeNodeConverter {
 
     private static String genChildrenSchemaStr(List<StructTreeNode> children) {
         if ( children == null || children.isEmpty()) {
-            return BLACK_STRING;
+            return BLANCK_STRING;
         }
-        String schemaStr = BLACK_STRING;
+        String schemaStr = BLANCK_STRING;
         for (StructTreeNode child : children) {
             String curSchema = generateSchemaStr(child);
-            if (schemaStr == BLACK_STRING) {
+            if (schemaStr == BLANCK_STRING) {
                 schemaStr = curSchema;
             } else {
                 schemaStr = String.format(CONNECT_FORMAT, schemaStr, curSchema);
@@ -77,7 +75,7 @@ public class StructTreeNodeConverter {
             try {
                 ObjectMapper mapper = new ObjectMapper();
                 JsonNode jsonNode = mapper.readTree(exampleJsonStr);
-                structTreeNode = generateTreeNode(structName, jsonNode, BLACK_STRING, false);
+                structTreeNode = generateTreeNode(structName, jsonNode, BLANCK_STRING, false);
             } catch (IOException exception) {
 
             }
@@ -91,8 +89,8 @@ public class StructTreeNodeConverter {
         StructTreeNode treeNode = new StructTreeNode(key);
         treeNode.setKey(key);
         treeNode.setType(jsonNode);
-        String currentPath = BLACK_STRING;
-        if (parentPath.equals(BLACK_STRING)) {
+        String currentPath = BLANCK_STRING;
+        if (parentPath.equals(BLANCK_STRING)) {
             currentPath = key;
         } else {
             currentPath = String.format(PATH_FORMAT,parentPath,key);

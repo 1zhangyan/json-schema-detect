@@ -1,4 +1,4 @@
-package org.zhangyan.converter;
+package org.zhangyan.service;
 
 
 import java.util.ArrayList;
@@ -13,9 +13,8 @@ import org.zhangyan.utils.Utils;
 import org.zhangyan.data.StructTree;
 import org.zhangyan.data.StructTreeNode;
 
-public class StructTreeConverter {
+public class StructTreeGenerator {
     //TODO: 考虑 List 且元素不同、暂不考虑
-
     public static StructTree mergeTree(StructTree originTree, StructTree targetTree) {
         if (!originTree.getStructName().equals(targetTree.getStructName())) {
             throw new RuntimeException("Can not merge tree that is not same filed!");
