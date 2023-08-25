@@ -25,6 +25,8 @@ public class StructTreeNodeConverter {
     private static String VALUE_INLIST_FORMAT = "\"%s\"";
     private static String CONNECT_FORMAT= "%s,%s";
 
+    private static String LIST_KEY = "@list";
+
     public static String generateSchemaStr(StructTreeNode node) {
         if (node == null || !Utils.isValidStr(node.getKey())) {
             return BLACK_STRING;
@@ -73,7 +75,7 @@ public class StructTreeNodeConverter {
             try {
                 ObjectMapper mapper = new ObjectMapper();
                 JsonNode jsonNode = mapper.readTree(exampleJsonStr);
-                structTreeNode = generateTreeNode(structName, jsonNode, "", false);
+                structTreeNode = generateTreeNode(structName, jsonNode, BLACK_STRING, false);
             } catch (IOException exception) {
 
             }
@@ -106,7 +108,7 @@ public class StructTreeNodeConverter {
             treeNode.setChildren(children);
         } else if (jsonNode.isArray() && jsonNode.size() > 0) {
             jsonNode.get(FIST_ELEMENT);
-            StructTreeNode child = generateTreeNode(treeNode.getKey(), jsonNode.get(0), currentPath, true);
+            StructTreeNode child = generateTreeNode(LIST_KEY, jsonNode.get(0), currentPath, true);
             treeNode.setChildren(Collections.singletonList(child));
         } else if (jsonNode.isValueNode()) {
             //
