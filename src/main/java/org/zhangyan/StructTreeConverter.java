@@ -1,5 +1,6 @@
 package org.zhangyan;
 
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -11,9 +12,6 @@ import java.util.stream.Collectors;
 
 public class StructTreeConverter {
     //TODO: 考虑 List 且元素不同、暂不考虑
-    //TODO: 类型不兼容，标记字段
-    //TODO: 字段为空
-    //TODO: 类型兼容 ： double > int > float. string > number.
 
     public static StructTree mergeTree(StructTree originTree, StructTree targetTree) {
         if (!originTree.getStructName().equals(targetTree.getStructName())) {
@@ -34,8 +32,12 @@ public class StructTreeConverter {
         StructTreeNode treeNode = new StructTreeNode(originNode.getKey());
         treeNode.setType(originNode.getType());
         treeNode.setInList(originNode.isInList()||targetNode.isInList());
-        if (originNode.getType().equals(targetNode.getType())) {
-            treeNode.setUncertainType(true);
+        if (!originNode.getType().equals(targetNode.getType())) {
+            if (originNode.getType().isNumber() && targetNode.getType().isNumber()) {
+                treeNode.setType(mergeNumberDataType(originNode.getType(), targetNode.getType()));
+            } else {
+                treeNode.setUncertainType(true);
+            }
         }
         treeNode.setChildren(mergeNodes(originNode.getChildren(),targetNode.getChildren()));
         return treeNode;
@@ -61,6 +63,11 @@ public class StructTreeConverter {
         return mergedNodes;
     }
 
-
+    public static StructTreeNode.DataType mergeNumberDataType(StructTreeNode.DataType typeA, StructTreeNode.DataType typeB) {
+        if (!typeA.isNumber() || !typeB.isNumber()) {
+            throw new RuntimeException("Only number Can be merged.");
+        }
+        return typeA.getOrder() > typeB.getOrder() ? typeA : typeB;
+    }
 
 }

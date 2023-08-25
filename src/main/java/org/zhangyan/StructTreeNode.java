@@ -104,16 +104,17 @@ public class StructTreeNode implements Comparable{
     }
 
     public enum DataType {
-        UNKNOWN(0,"unknown","未知类型"),
-        STRING(1, "string", "字符串类型"),
-        BOOLEAN(2, "boolean", "布尔型"),
-        SHORT(3, "short", "短整型"),
-        INT(4, "int", "整型，整型默认值"),
-        LONG(5, "long", "长整型"),
-        FLOAT(6, "float", "浮点型，浮点默认值"),
-        DOUBLE(7,"double", "双精度浮点"),
-        LIST(8, "list", "列表型"),
-        MAP(9,"map", "字典型")
+
+        BOOLEAN(0, "boolean", "布尔型"),
+        SHORT(1, "short", "短整型"),
+        INT(2, "int", "整型，整型默认值"),
+        LONG(3, "long", "长整型"),
+        FLOAT(4, "float", "浮点型，浮点默认值"),
+        DOUBLE(5,"double", "双精度浮点"),
+        STRING(6, "string", "字符串类型"),
+        LIST(7, "list", "列表型"),
+        MAP(8,"map", "字典型"),
+        UNKNOWN(9,"unknown","未知类型")
         ;
         private int order;
         private String name;
@@ -123,6 +124,11 @@ public class StructTreeNode implements Comparable{
         DataType(int order, String name, String description) {
             this.name =  name;
             this.order = order;
+        }
+
+        public boolean isNumber() {
+            return getOrder() > SHORT.getOrder()
+                    && getOrder() < DOUBLE.getOrder();
         }
 
         public boolean equals(DataType dataType) {
@@ -144,9 +150,12 @@ public class StructTreeNode implements Comparable{
             return description;
         }
 
-        public void setDescription(String description) {
-            this.description = description;
+        public int getOrder() {
+            return order;
         }
 
+        public String getName() {
+            return name;
+        }
     }
 }
