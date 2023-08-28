@@ -4,7 +4,6 @@ import static org.zhangyan.constant.SchemaDetectConstant.ILLEGAL_ID;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -31,6 +30,19 @@ public class StructTreeConvertor {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     private static final StructTreeNodeDao structTreeNodeDao = new  StructTreeNodeDao();
+
+    private static final StructTreeNodeConvertor structTreeNodeConvertor = new StructTreeNodeConvertor();
+
+    public Long create(StructTree structTree) throws JsonProcessingException {
+        StructTreeDO structTreeDO = new StructTreeDO();
+        structTreeDO.setStructName(structTree.getStructName());
+        structTreeDO.setExampleJsonStr(structTree.getExampleJsonStr());
+
+        StructTreeNodeConvertor.IdPair idPair = structTreeNodeConvertor.create(structTree.getRootNode());
+        structTreeDO.setNodeList(objectMapper.writeValueAsString(idPair.allNodeIds));
+        structTreeDO.setRootNodeId(idPair.curId);
+        return structTreeNodeDao.create(structTreeDO);
+    }
 
     public StructTree convert(StructTreeDO structTreeDo) {
         StructTree structTree = new StructTree();
@@ -75,10 +87,8 @@ public class StructTreeConvertor {
             if (CollectionUtils.isEmpty(structTreeNodeDOS)) {
                 return null;
             }
-
             Map<Long,StructTreeNodeDO> id2NodeMap = structTreeNodeDOS.stream()
                     .collect(Collectors.toMap(StructTreeNodeDO::getId, Function.identity()));
-
             return StructTreeNodeConvertor.convert(structTreeDO.getRootNodeId(),id2NodeMap);
         } catch (IOException e) {
             LOG.info("[StructTreeConvertor]: can not convert nodeSet from {}",structTreeDO.getNodeList(),e);

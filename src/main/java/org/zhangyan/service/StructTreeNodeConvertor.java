@@ -14,8 +14,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import org.zhangyan.dao.StructTreeDO;
 import org.zhangyan.dao.StructTreeNodeDO;
 import org.zhangyan.dao.StructTreeNodeDao;
+import org.zhangyan.data.StructTree;
 import org.zhangyan.data.StructTreeNode;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,9 +26,35 @@ public class StructTreeNodeConvertor {
     private static final Logger LOG = LoggerFactory.getLogger(StructTreeConvertor.class);
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
-
     private static StructTreeNodeDao structTreeNodeDao = new StructTreeNodeDao();
 
+    public class IdPair {
+        public IdPair(){}
+        public Long curId = ILLEGAL_ID;
+        public List<Long> allNodeIds = new ArrayList<>();
+    }
+
+    public IdPair create(StructTreeNode structTreeNode) throws JsonProcessingException {
+        List<Long> allNodeIds = new ArrayList<>();
+        for (StructTreeNode treeNode : structTreeNode.getChildren()) {
+            IdPair idPair = create(treeNode);
+            allNodeIds.addAll(idPair.allNodeIds);
+        }
+        StructTreeNodeDO structTreeNodeDO = new StructTreeNodeDO();
+        structTreeNodeDO.setType(structTreeNode.getType().getName());
+        structTreeNodeDO.setChildrenIds(objectMapper.writeValueAsString(allNodeIds));
+        structTreeNodeDO.setKey(structTreeNode.getKey());
+        structTreeNodeDO.setPath(structTreeNode.getPath());
+        structTreeNodeDO.setInList(structTreeNode.isInList());
+        structTreeNodeDO.setUncertainType(structTreeNode.isUncertainType());
+        Long id = Long.valueOf(structTreeNodeDao.create(structTreeNodeDO));
+        allNodeIds.add(id);
+        Collections.sort(allNodeIds);
+        IdPair idPair = new IdPair();
+        idPair.allNodeIds = allNodeIds;
+        idPair.curId = id;
+        return idPair;
+    }
 
     public static StructTreeNode convert(StructTreeNodeDO structTreeDo) {
         StructTreeNode structTreeNode = new StructTreeNode();

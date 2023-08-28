@@ -1,23 +1,29 @@
 package org.zhangyan.dao;
 
+import static org.zhangyan.constant.SchemaDetectConstant.monckStructNodeDataBase;
+import static org.zhangyan.constant.SchemaDetectConstant.monckStructTreeDataBase;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 public class StructTreeNodeDao {
 
-    private static List<StructTreeNodeDO> monckStructNodeDataBase = new ArrayList<>();
-    private static List<StructTreeDO> monckStructTreeDataBase = new ArrayList();
 
-    public int create(StructTreeNodeDO structTreeNodeDO) {
+    public Long create(StructTreeNodeDO structTreeNodeDO) {
+        Long pos = Long.valueOf(monckStructNodeDataBase.size());
+        structTreeNodeDO.setId(pos);
         monckStructNodeDataBase.add(structTreeNodeDO);
-        return monckStructNodeDataBase.size()-1;
+        return pos;
     }
 
-    public int create(StructTreeDO structTreeDO) {
+    public Long create(StructTreeDO structTreeDO) {
+        Long pos = Long.valueOf(monckStructNodeDataBase.size());
+        structTreeDO.setId(pos);
         monckStructTreeDataBase.add(structTreeDO);
-        return monckStructNodeDataBase.size()-1;
+        return pos;
     }
 
     public void update(StructTreeNodeDO structTreeNodeDO) {
@@ -40,6 +46,15 @@ public class StructTreeNodeDao {
             }
         }
         return nodeDOList;
+    }
+
+    public StructTreeDO getByPath(String path) {
+        if (StringUtils.isEmpty(path)) {
+            return null;
+        }
+        return monckStructTreeDataBase.stream()
+                .filter(it -> it.getStructName().equals(path))
+                .findFirst().get();
     }
 
 }
