@@ -1,6 +1,7 @@
 package org.zhangyan.dao;
 
-import static org.zhangyan.utils.Utils.BLANCK_STRING;
+
+import static org.zhangyan.constant.DataTrackConstant.BLANCK_STRING;
 
 public class StructTreeDo {
 

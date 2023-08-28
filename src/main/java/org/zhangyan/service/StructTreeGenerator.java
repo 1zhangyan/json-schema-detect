@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.zhangyan.utils.Utils;
+import org.springframework.util.CollectionUtils;
 import org.zhangyan.data.StructTree;
 import org.zhangyan.data.StructTreeNode;
 
@@ -45,8 +45,8 @@ public class StructTreeGenerator {
         return treeNode;
     }
     private static List<StructTreeNode> mergeNodes(List<StructTreeNode> originNodes, List<StructTreeNode> targetNodes) {
-        if (Utils.isEmpty(originNodes) ||  Utils.isEmpty(targetNodes)) {
-            return Utils.isEmpty(originNodes) ? targetNodes : originNodes;
+        if (CollectionUtils.isEmpty(originNodes) ||  CollectionUtils.isEmpty(targetNodes)) {
+            return CollectionUtils.isEmpty(originNodes) ? targetNodes : originNodes;
         }
         List<StructTreeNode> mergedNodes = new ArrayList<>();
         Map<String, StructTreeNode> originNodesMap =  originNodes.stream().collect(Collectors.toMap(StructTreeNode::getKey, Function.identity()));

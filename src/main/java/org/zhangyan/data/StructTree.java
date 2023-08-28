@@ -1,10 +1,11 @@
 package org.zhangyan.data;
 
 
-import static org.zhangyan.utils.Utils.BLANCK_STRING;
 
+import static org.zhangyan.constant.DataTrackConstant.BLANCK_STRING;
+
+import org.springframework.util.StringUtils;
 import org.zhangyan.service.StructTreeNodeGenerator;
-import org.zhangyan.utils.Utils;
 
 public class StructTree {
 
@@ -58,7 +59,7 @@ public class StructTree {
     }
 
     private void generateTree() {
-        if (!Utils.isValidStr(structName) && Utils.isValidStr(exampleJsonStr)) {
+        if (StringUtils.isEmpty(structName) || StringUtils.isEmpty(exampleJsonStr)) {
             return;
         }
         setRootNode(StructTreeNodeGenerator.generateTreeFromJsonExample(this.exampleJsonStr , this.structName));

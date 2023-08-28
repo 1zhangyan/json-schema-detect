@@ -1,13 +1,14 @@
 package org.zhangyan.service;
 
-import static org.zhangyan.utils.Utils.BLANCK_STRING;
+
+import static org.zhangyan.constant.DataTrackConstant.BLANCK_STRING;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import org.zhangyan.utils.Utils;
+import org.springframework.util.StringUtils;
 import org.zhangyan.data.StructTreeNode;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,7 +29,7 @@ public class StructTreeNodeGenerator {
     private static String LIST_KEY = "@list";
 
     public static String generateSchemaStr(StructTreeNode node) {
-        if (node == null || !Utils.isValidStr(node.getKey())) {
+        if (node == null || StringUtils.isEmpty(node.getKey())) {
             return BLANCK_STRING;
         }
         String schemaStr = BLANCK_STRING;
@@ -70,8 +71,7 @@ public class StructTreeNodeGenerator {
 
     public static StructTreeNode generateTreeFromJsonExample(String exampleJsonStr, String structName) {
         StructTreeNode structTreeNode = null;
-        if (Utils.isValidStr(exampleJsonStr) && Utils.isValidStr(structName)) {
-
+        if (!StringUtils.isEmpty(exampleJsonStr) && !StringUtils.isEmpty(structName)) {
             try {
                 ObjectMapper mapper = new ObjectMapper();
                 JsonNode jsonNode = mapper.readTree(exampleJsonStr);

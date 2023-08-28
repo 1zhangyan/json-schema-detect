@@ -1,11 +1,12 @@
 package org.zhangyan.data;
 
 
-import static org.zhangyan.utils.Utils.BLANCK_STRING;
+
+import static org.zhangyan.constant.DataTrackConstant.BLANCK_STRING;
 
 import java.util.Collections;
 import java.util.List;
-import org.zhangyan.utils.Utils;
+import org.springframework.util.StringUtils;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
@@ -128,7 +129,9 @@ public class StructTreeNode implements Comparable {
         private String description;
 
         public DataType getDataType(String name) {
-            Utils.validStr(name);
+            if(StringUtils.isEmpty(name)) {
+                throw new RuntimeException("can not transfer empty string");
+            }
             if (BOOLEAN.equals(name)) {
                 return BOOLEAN;
             } else if (SHORT.equals(name)) {

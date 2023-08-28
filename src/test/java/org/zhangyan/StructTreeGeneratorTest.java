@@ -3,10 +3,9 @@ package org.zhangyan;
 import org.zhangyan.service.StructTreeGenerator;
 import org.zhangyan.data.StructTree;
 
-class StructTreeGeneratorTest {
-
-    @org.junit.jupiter.api.Test
-    void mergeTree() {
+public class StructTreeGeneratorTest {
+    public static void main(String args[]
+    ) {
 
         StructTree tree1= new StructTree("tree","{\"layer1-3\":122.2,\"layer1-2\":[\"test1\",\"test2\"],\"layer1-1\":{\"layer2-2\":\"steam\",\"layer2-1\":\"wegame\"},\"layer1-5\":278.222}");
         StructTree tree2= new StructTree("tree","{\"layer1-4\":278.33,\"layer1-3\":171,\"layer1-2\":[\"tea\",\"tcoco\"],\"layer1-1\":{\"layer2-3\":\"ll\",\"layer2-2\":\"cheat\",\"layer2-4\":\"heat\"}}");
