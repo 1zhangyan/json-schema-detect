@@ -1,10 +1,11 @@
 package org.zhangyan.dao;
 
 
-import static org.zhangyan.constant.DataTrackConstant.BLANCK_STRING;
+import static org.zhangyan.constant.SchemaDetectConstant.BLANCK_STRING;
+import static org.zhangyan.constant.SchemaDetectConstant.ILLEGAL_ID;
 
-public class StructTreeNodeDo {
-    private Long id = 0L;
+public class StructTreeNodeDO {
+    private Long id = ILLEGAL_ID;
     private String key = BLANCK_STRING;
     private String type = BLANCK_STRING;
     private String path = BLANCK_STRING;

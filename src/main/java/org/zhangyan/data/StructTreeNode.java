@@ -2,7 +2,8 @@ package org.zhangyan.data;
 
 
 
-import static org.zhangyan.constant.DataTrackConstant.BLANCK_STRING;
+import static org.zhangyan.constant.SchemaDetectConstant.BLANCK_STRING;
+import static org.zhangyan.constant.SchemaDetectConstant.ILLEGAL_ID;
 
 import java.util.Collections;
 import java.util.List;
@@ -13,15 +14,16 @@ import com.fasterxml.jackson.databind.node.JsonNodeType;
 
 public class StructTreeNode implements Comparable {
 
-    private Long id = 0L;
+    private Long id = ILLEGAL_ID;
     private String key = BLANCK_STRING;
     private DataType type = DataType.UNKNOWN;
     private String path = BLANCK_STRING;
     private boolean inList = false;
     private boolean uncertainType = false;
-
     private List<StructTreeNode> children = Collections.emptyList();
 
+    public StructTreeNode() {
+    }
     public StructTreeNode(String key) {
         this.key = key;
     }
@@ -128,7 +130,7 @@ public class StructTreeNode implements Comparable {
         private String name;
         private String description;
 
-        public DataType getDataType(String name) {
+        public static DataType getDataType(String name) {
             if(StringUtils.isEmpty(name)) {
                 throw new RuntimeException("can not transfer empty string");
             }

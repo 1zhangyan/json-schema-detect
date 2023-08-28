@@ -2,14 +2,15 @@ package org.zhangyan.data;
 
 
 
-import static org.zhangyan.constant.DataTrackConstant.BLANCK_STRING;
+import static org.zhangyan.constant.SchemaDetectConstant.BLANCK_STRING;
+import static org.zhangyan.constant.SchemaDetectConstant.ILLEGAL_ID;
 
 import org.springframework.util.StringUtils;
 import org.zhangyan.service.StructTreeNodeGenerator;
 
 public class StructTree {
 
-    private Long id = 0L;
+    private Long id = ILLEGAL_ID;
 
     private String structName = BLANCK_STRING;
 

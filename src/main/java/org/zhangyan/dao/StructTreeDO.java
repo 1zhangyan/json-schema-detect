@@ -1,11 +1,12 @@
 package org.zhangyan.dao;
 
 
-import static org.zhangyan.constant.DataTrackConstant.BLANCK_STRING;
+import static org.zhangyan.constant.SchemaDetectConstant.BLANCK_STRING;
+import static org.zhangyan.constant.SchemaDetectConstant.ILLEGAL_ID;
 
-public class StructTreeDo {
+public class StructTreeDO {
 
-    private Long id = 0L;
+    private Long id = ILLEGAL_ID;
 
     private String structName = BLANCK_STRING;
 
@@ -13,7 +14,7 @@ public class StructTreeDo {
 
     private Long rootNodeId = 0L;
 
-    private String nodeSet = BLANCK_STRING;
+    private String nodeList = BLANCK_STRING;
 
 
     public Long getId() {
@@ -38,12 +39,12 @@ public class StructTreeDo {
         this.exampleJsonStr = exampleJsonStr;
     }
 
-    public String getNodeSet() {
-        return nodeSet;
+    public String getNodeList() {
+        return nodeList;
     }
 
-    public void setNodeSet(String nodeSet) {
-        this.nodeSet = nodeSet;
+    public void setNodeList(String nodeList) {
+        this.nodeList = nodeList;
     }
 
     public Long getRootNodeId() {
