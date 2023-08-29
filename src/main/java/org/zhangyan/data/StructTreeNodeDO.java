@@ -1,4 +1,4 @@
-package org.zhangyan.dao;
+package org.zhangyan.data;
 
 
 import static org.zhangyan.constant.SchemaDetectConstant.BLANCK_STRING;
@@ -12,6 +12,9 @@ public class StructTreeNodeDO {
     private boolean inList = false;
     private boolean uncertainType = false;
     private String childrenIds = BLANCK_STRING;
+    private String allNodeContains = BLANCK_STRING;
+    private String exampleJsonStr = BLANCK_STRING;
+    private String schemaJsonStr = BLANCK_STRING;
 
     public Long getId() {
         return id;
@@ -67,5 +70,13 @@ public class StructTreeNodeDO {
 
     public void setChildrenIds(String childrenIds) {
         this.childrenIds = childrenIds;
+    }
+
+    public String getAllNodeContains() {
+        return allNodeContains;
+    }
+
+    public void setAllNodeContains(String allNodeContains) {
+        this.allNodeContains = allNodeContains;
     }
 }

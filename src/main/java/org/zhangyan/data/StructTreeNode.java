@@ -1,7 +1,5 @@
 package org.zhangyan.data;
 
-
-
 import static org.zhangyan.constant.SchemaDetectConstant.BLANCK_STRING;
 import static org.zhangyan.constant.SchemaDetectConstant.ILLEGAL_ID;
 
@@ -21,6 +19,9 @@ public class StructTreeNode implements Comparable {
     private boolean inList = false;
     private boolean uncertainType = false;
     private List<StructTreeNode> children = Collections.emptyList();
+    private String exampleJsonStr = BLANCK_STRING;
+    private List<Long> childrenIds = Collections.emptyList();
+    private List<Long> allContainNodeIds = Collections.emptyList();
 
     public StructTreeNode() {
     }
@@ -112,6 +113,30 @@ public class StructTreeNode implements Comparable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<Long> getChildrenIds() {
+        return childrenIds;
+    }
+
+    public void setChildrenIds(List<Long> childrenIds) {
+        this.childrenIds = childrenIds;
+    }
+
+    public List<Long> getAllContainNodeIds() {
+        return allContainNodeIds;
+    }
+
+    public void setAllNodeContains(List<Long> allContainNodeIds) {
+        this.allContainNodeIds = allContainNodeIds;
+    }
+
+    public String getExampleJsonStr() {
+        return exampleJsonStr;
+    }
+
+    public void setExampleJsonStr(String exampleJsonStr) {
+        this.exampleJsonStr = exampleJsonStr;
     }
 
     public enum DataType {

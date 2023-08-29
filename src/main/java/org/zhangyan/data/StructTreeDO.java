@@ -1,4 +1,4 @@
-package org.zhangyan.dao;
+package org.zhangyan.data;
 
 
 import static org.zhangyan.constant.SchemaDetectConstant.BLANCK_STRING;

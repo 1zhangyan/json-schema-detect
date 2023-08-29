@@ -1,4 +1,12 @@
 package org.zhangyan.dao;
 
-public class StructTreeDao {
+import org.zhangyan.data.StructTreeDO;
+
+public interface StructTreeDao {
+
+    public Long create(StructTreeDO structTreeDO);
+
+    public void update(StructTreeDO structTreeDO);
+
+    public StructTreeDO getByPath(String path);
 }
