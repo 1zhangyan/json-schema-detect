@@ -1,5 +1,6 @@
 package org.zhangyan.dao;
 
+import static org.zhangyan.constant.SchemaDetectConstant.ILLEGAL_ID;
 import static org.zhangyan.constant.SchemaDetectConstant.monckStructNodeDataBase;
 
 import java.util.ArrayList;
@@ -15,19 +16,30 @@ import org.zhangyan.data.StructTreeNodeDO;
 public class StructTreeNodeDaoImpl implements StructTreeNodeDao {
 
     @Override
-    public Long create(StructTreeNodeDO structTreeNodeDO) {
+    public Long upsert(StructTreeNodeDO structTreeNodeDO) {
+        if (StringUtils.isEmpty(structTreeNodeDO.getPath())) {
+            return ILLEGAL_ID;
+        }
+        Optional<StructTreeNodeDO> optional =  monckStructNodeDataBase.stream()
+                .filter(it -> it.getPath().equals(structTreeNodeDO.getPath())).findFirst();
+        if (optional.isPresent()) {
+            StructTreeNodeDO nodeDO = optional.get();
+            structTreeNodeDO.setId(nodeDO.getId());
+            monckStructNodeDataBase.set(nodeDO.getId().intValue(), structTreeNodeDO);
+            return nodeDO.getId();
+        } else {
+            return create(structTreeNodeDO);
+        }
+    }
+
+    private Long create(StructTreeNodeDO structTreeNodeDO) {
         Long pos = Long.valueOf(monckStructNodeDataBase.size());
         structTreeNodeDO.setId(pos);
         monckStructNodeDataBase.add(structTreeNodeDO);
         return pos;
     }
 
-
-    public void update(StructTreeNodeDO structTreeNodeDO) {
-        monckStructNodeDataBase.set(structTreeNodeDO.getId().intValue(), structTreeNodeDO);
-    }
-
-
+    @Override
     public List<StructTreeNodeDO> getListByIds(List<Long> idList) {
         if (CollectionUtils.isEmpty(idList)) {
             return Collections.emptyList();

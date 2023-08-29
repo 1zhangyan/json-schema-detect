@@ -4,15 +4,10 @@ import java.util.List;
 import org.zhangyan.data.StructTreeNodeDO;
 
 public interface StructTreeNodeDao {
-
-    Long create(StructTreeNodeDO structTreeNodeDO);
-
-    void update(StructTreeNodeDO structTreeNodeDO);
+    Long upsert(StructTreeNodeDO structTreeNodeDO);
 
     List<StructTreeNodeDO> getListByIds(List<Long> idList);
 
     StructTreeNodeDO getByPath(String path);
-
-
 
 }

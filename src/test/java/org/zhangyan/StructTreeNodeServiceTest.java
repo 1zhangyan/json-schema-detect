@@ -27,7 +27,7 @@ public class StructTreeNodeServiceTest {
         StructTreeNode tree1= structTreeNodeService.generateTreeFromJsonExample("tree","{\"layer1-3\":122.2,\"layer1-2\":[\"test1\",\"test2\"],\"layer1-1\":{\"layer2-2\":\"steam\",\"layer2-1\":\"wegame\"},\"layer1-5\":278.222}");
         StructTreeNode tree2 = null;
         if (structTreeNodeService.getByPath(tree1.getPath()) == null) {
-            tree2  = structTreeNodeService.createWithChildren(tree1);
+            tree2  = structTreeNodeService.upsertWithChildren(tree1);
         }
         LOG.info(structTreeNodeService.generateSchemaStr(tree2));
         StructTreeNode tree3= structTreeNodeService.generateTreeFromJsonExample("tree","{\"layer1-4\":278.33,\"layer1-3\":171,\"layer1-2\":[\"tea\",\"tcoco\"],\"layer1-1\":{\"layer2-3\":\"ll\",\"layer2-2\":\"cheat\",\"layer2-4\":\"heat\"}}");
@@ -40,10 +40,25 @@ public class StructTreeNodeServiceTest {
     @Test
     public void testGetByPath(){
         StructTreeNode tree1= structTreeNodeService.generateTreeFromJsonExample("tree","{\"layer1-3\":122.2,\"layer1-2\":[\"test1\",\"test2\"],\"layer1-1\":{\"layer2-2\":\"steam\",\"layer2-1\":\"wegame\"},\"layer1-5\":278.222}");
-        StructTreeNode tree2  = structTreeNodeService.createWithChildren(tree1);
+//        StructTreeNode tree1= structTreeNodeService.generateTreeFromJsonExample("tree","{\"layer\":[1,2,3]}");
+        StructTreeNode tree2  = structTreeNodeService.upsertWithChildren(tree1);
         StructTreeNode tree3  = structTreeNodeService.getByPath(tree1.getPath());
         LOG.info(structTreeNodeService.generateSchemaStr(tree1));
         LOG.info(structTreeNodeService.generateSchemaStr(tree2));
         LOG.info(structTreeNodeService.generateSchemaStr(tree3));
+    }
+
+    @Test
+    public void testUpsert() {
+        StructTreeNode tree1= structTreeNodeService.generateTreeFromJsonExample("tree","{\"layer1-3\":122.2,\"layer1-2\":[\"test1\",\"test2\"],\"layer1-1\":{\"layer2-2\":\"steam\",\"layer2-1\":\"wegame\"},\"layer1-5\":278.222}");
+        StructTreeNode tree2  = structTreeNodeService.upsertWithChildren(tree1);
+        StructTreeNode tree3  = structTreeNodeService.getByPath(tree1.getPath());
+        LOG.info(structTreeNodeService.generateSchemaStr(tree2));
+        LOG.info(structTreeNodeService.generateSchemaStr(tree3));
+        StructTreeNode tree4= structTreeNodeService.generateTreeFromJsonExample("tree","{\"layer1-4\":278.33,\"layer1-3\":171,\"layer1-2\":[\"tea\",\"tcoco\"],\"layer1-1\":{\"layer2-3\":\"ll\",\"layer2-2\":\"cheat\",\"layer2-4\":\"heat\"}}");
+        LOG.info(structTreeNodeService.generateSchemaStr(tree4));
+        StructTreeNode tree5= nodeMergeService.mergeNodeWithSameKey(tree3,tree4);
+        structTreeNodeService.upsertWithChildren(tree5);
+        LOG.info(structTreeNodeService.generateSchemaStr(structTreeNodeService.getByPath(tree5.getPath())));
     }
 }

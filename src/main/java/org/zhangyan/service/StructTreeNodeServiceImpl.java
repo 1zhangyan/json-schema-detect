@@ -15,7 +15,6 @@ import org.springframework.util.StringUtils;
 import org.zhangyan.dao.StructTreeNodeDao;
 import org.zhangyan.data.StructTreeNode;
 import org.zhangyan.data.StructTreeNodeDO;
-import org.zhangyan.data.StructTreeNodeVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,14 +50,14 @@ public class StructTreeNodeServiceImpl implements  StructTreeNodeService{
     }
 
     @Override
-    public StructTreeNode createWithChildren(StructTreeNode structTreeNode) {
+    public StructTreeNode upsertWithChildren(StructTreeNode structTreeNode) {
         List<Long> allNodeIds = Collections.emptyList();
         List<Long> childrenIds = Collections.emptyList();
         if (!CollectionUtils.isEmpty(structTreeNode.getChildren())) {
             allNodeIds = new ArrayList<>();
             childrenIds = new ArrayList<>();
             for (StructTreeNode treeNode : structTreeNode.getChildren()) {
-                StructTreeNode leafNode = createWithChildren(treeNode);
+                StructTreeNode leafNode = upsertWithChildren(treeNode);
                 allNodeIds.addAll(leafNode.getAllContainNodeIds());
                 childrenIds.add(leafNode.getId());
             }
@@ -73,7 +72,7 @@ public class StructTreeNodeServiceImpl implements  StructTreeNodeService{
             structTreeNodeDO.setInList(structTreeNode.isInList());
             structTreeNodeDO.setUncertainType(structTreeNode.isUncertainType());
             structTreeNodeDO.setAllNodeContains(objectMapper.writeValueAsString(allNodeIds));
-            Long id = Long.valueOf(structTreeNodeDao.create(structTreeNodeDO));
+            Long id = Long.valueOf(structTreeNodeDao.upsert(structTreeNodeDO));
             structTreeNode.setId(id);
             structTreeNode.setAllNodeContains(allNodeIds);
             structTreeNode.setChildrenIds(childrenIds);
@@ -86,11 +85,6 @@ public class StructTreeNodeServiceImpl implements  StructTreeNodeService{
 
     @Override
     public void update(StructTreeNode structTreeNode) {
-
-    }
-
-    @Override
-    public void update(StructTreeNodeVO structTreeNodeVO) {
 
     }
 
