@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,6 @@ import org.springframework.util.StringUtils;
 import org.zhangyan.data.StructTreeNodeDO;
 import org.zhangyan.dao.StructTreeNodeDao;
 import org.zhangyan.data.StructTreeNode;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -32,13 +32,22 @@ public class NodeConvertService {
     @Autowired
     private StructTreeNodeDao structTreeNodeDao;
 
-
-
     public StructTreeNode convert(StructTreeNodeDO structTreeNodeDo) {
         StructTreeNode structTreeNode = new StructTreeNode();
-        structTreeNode.setType(StructTreeNode.DataType.getDataType(structTreeNodeDo.getType()));
         BeanUtils.copyProperties(structTreeNodeDo, structTreeNode);
-        structTreeNode.setChildren(genChildrenTree(structTreeNodeDo));
+        structTreeNode.setType(StructTreeNode.DataType.getDataType(structTreeNodeDo.getType()));
+        try {
+            structTreeNode.setChildrenIds(objectMapper.readValue(structTreeNodeDo.getChildrenIds(), new TypeReference<List<Long>>() {}));
+            structTreeNode.setAllNodeContains(objectMapper.readValue(structTreeNodeDo.getAllNodeContains(), new TypeReference<List<Long>>() {}));
+        } catch (Exception e) {
+            LOG.error("[NodeConvertor]: can not convert childrenList or allNodeContains.",e);
+        }
+
+        if (!CollectionUtils.isEmpty(structTreeNode.getAllContainNodeIds())) {
+            Map<Long, StructTreeNodeDO> id2NodeMap = structTreeNodeDao.getListByIds(structTreeNode.getAllContainNodeIds())
+                    .stream().collect(Collectors.toMap(StructTreeNodeDO::getId, Function.identity()));
+            structTreeNode.setChildren(genChildrenTree(structTreeNodeDo, id2NodeMap));
+        }
         return structTreeNode;
     }
 
@@ -49,6 +58,7 @@ public class NodeConvertService {
         try {
             List<Long> childrenIds = objectMapper.readValue(structTreeNodeDO.getChildrenIds(), new TypeReference<List<Long>>() {});
             List<StructTreeNodeDO> treeNodeDOS = structTreeNodeDao.getListByIds(childrenIds);
+            treeNodeDOS.add(structTreeNodeDO);
             List<StructTreeNode> structTreeNodes = treeNodeDOS.stream()
                     .map(it -> convert(it))
                     .collect(Collectors.toList());
@@ -59,7 +69,7 @@ public class NodeConvertService {
         }
     }
 
-    public StructTreeNode convert(Long structTreeNodeId, Map<Long, StructTreeNodeDO> id2NodeMap) {
+    private StructTreeNode convert(Long structTreeNodeId, Map<Long, StructTreeNodeDO> id2NodeMap) {
         if (structTreeNodeId == ILLEGAL_ID) {
             return null;
         }
@@ -76,7 +86,7 @@ public class NodeConvertService {
             return Collections.emptyList();
         }
         try {
-            List<Long> childrenIds = objectMapper.readValue(structTreeNodeDO.getChildrenIds(), List.class);
+            List<Long> childrenIds = objectMapper.readValue(structTreeNodeDO.getChildrenIds(), new TypeReference<List<Long>>() {});
             if (CollectionUtils.isEmpty(childrenIds)) {
                 return Collections.emptyList();
             }
@@ -86,24 +96,13 @@ public class NodeConvertService {
                 treeNodeDOS.add(structTreeDO);
             }
             List<StructTreeNode> structTreeNodes = treeNodeDOS.stream()
-                    .map(it -> convert(it))
+                    .map(it -> convert(it.getId(), id2NodeMap))
                     .collect(Collectors.toList());
             return structTreeNodes;
         } catch (IOException e) {
             LOG.info("[StructTreeNodeConvertor]: can not convert childrenList from {}", structTreeNodeDO.getChildrenIds(), e);
             return Collections.emptyList();
         }
-    }
-
-    public StructTreeNodeDO convert(StructTreeNode structTreeNode) throws JsonProcessingException {
-        StructTreeNodeDO structTreeNodeDO = new StructTreeNodeDO();
-        structTreeNodeDO.setType(structTreeNode.getType().getName());
-        BeanUtils.copyProperties(structTreeNode, structTreeNodeDO);
-        List<Long> childrenIdList = structTreeNode.getChildren().stream()
-                .map(StructTreeNode::getId)
-                .collect(Collectors.toList());
-        structTreeNodeDO.setChildrenIds(objectMapper.writeValueAsString(childrenIdList));
-        return structTreeNodeDO;
     }
 
 }

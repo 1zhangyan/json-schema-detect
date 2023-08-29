@@ -9,7 +9,7 @@ public interface StructTreeNodeDao {
 
     void update(StructTreeNodeDO structTreeNodeDO);
 
-    List<StructTreeNodeDO> getListByIds(List<Long> childrenList);
+    List<StructTreeNodeDO> getListByIds(List<Long> idList);
 
     StructTreeNodeDO getByPath(String path);
 

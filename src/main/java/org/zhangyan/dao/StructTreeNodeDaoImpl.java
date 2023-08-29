@@ -28,14 +28,14 @@ public class StructTreeNodeDaoImpl implements StructTreeNodeDao {
     }
 
 
-    public List<StructTreeNodeDO> getListByIds(List<Long> childrenList) {
-        if (CollectionUtils.isEmpty(childrenList)) {
+    public List<StructTreeNodeDO> getListByIds(List<Long> idList) {
+        if (CollectionUtils.isEmpty(idList)) {
             return Collections.emptyList();
         }
-        Collections.sort(childrenList);
+        Collections.sort(idList);
         List<StructTreeNodeDO> nodeDOList = new ArrayList<>();
-        for (Long aLong : childrenList) {
-            if (aLong > 0L && aLong < nodeDOList.size()) {
+        for (Long aLong : idList) {
+            if (aLong >= 0L && aLong < monckStructNodeDataBase.size()) {
                 nodeDOList.add(monckStructNodeDataBase.get(aLong.intValue()));
             }
         }
