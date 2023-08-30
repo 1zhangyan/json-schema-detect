@@ -1,5 +1,7 @@
 package org.zhangyan;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -60,5 +62,20 @@ public class StructTreeNodeServiceTest {
         StructTreeNode tree5= nodeMergeService.mergeNodeWithSameKey(tree3,tree4);
         structTreeNodeService.upsertWithChildren(tree5);
         LOG.info(structTreeNodeService.generateSchemaStr(structTreeNodeService.getByPath(tree5.getPath())));
+    }
+
+    @Test
+    public void mergeListNode() {
+        StructTreeNode tree1= structTreeNodeService.generateTreeFromJsonExample("tree","{\"layer1-3\":122.2,\"layer1-2\":[\"test1\",\"test2\"],\"layer1-1\":{\"layer2-2\":\"steam\",\"layer2-1\":\"wegame\"},\"layer1-5\":278.222}");
+        StructTreeNode tree2= structTreeNodeService.generateTreeFromJsonExample("tree","{\"layer1-7\":122.2,\"layer1-8\":[\"test1\",\"test2\"],\"layer1-1\":{\"layer2-2\":\"steam\",\"layer2-1\":\"wegame\"},\"layer1-5\":278.222}");
+        StructTreeNode tree3= structTreeNodeService.generateTreeFromJsonExample("tree","{\"layer1-9\":122.2,\"layer1-10\":[\"test1\",\"test2\"],\"layer1-1\":{\"layer2-2\":\"steam\",\"layer2-1\":\"wegame\"},\"layer1-5\":278.222}");
+        StructTreeNode tree4= structTreeNodeService.generateTreeFromJsonExample("tree","{\"layer1-11\":122.2,\"layer1-12\":[\"test1\",\"test2\"],\"layer1-1\":{\"layer2-2\":\"steam\",\"layer2-1\":\"wegame\"},\"layer1-5\":278.222}");
+        List<StructTreeNode> nodeList = new ArrayList<>();
+        nodeList.add(tree1);
+        nodeList.add(tree2);
+        nodeList.add(tree3);
+        nodeList.add(tree4);
+        StructTreeNode endNode = nodeMergeService.mergeNodesWithSameKey(nodeList);
+        LOG.info(structTreeNodeService.generateSchemaStr(endNode));
     }
 }
