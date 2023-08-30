@@ -1,7 +1,7 @@
 package org.zhangyan.dao;
 
-import static org.zhangyan.constant.SchemaDetectConstant.ILLEGAL_ID;
-import static org.zhangyan.constant.SchemaDetectConstant.monckStructNodeDataBase;
+import static org.zhangyan.constant.DataTrackConstant.ILLEGAL_ID;
+import static org.zhangyan.constant.DataTrackConstant.monckStructNodeDataBase;
 
 import java.util.ArrayList;
 import java.util.Collections;

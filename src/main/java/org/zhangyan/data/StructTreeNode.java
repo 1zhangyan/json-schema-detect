@@ -1,7 +1,7 @@
 package org.zhangyan.data;
 
-import static org.zhangyan.constant.SchemaDetectConstant.BLANCK_STRING;
-import static org.zhangyan.constant.SchemaDetectConstant.ILLEGAL_ID;
+import static org.zhangyan.constant.DataTrackConstant.BLANCK_STRING;
+import static org.zhangyan.constant.DataTrackConstant.ILLEGAL_ID;
 
 import java.util.Collections;
 import java.util.List;

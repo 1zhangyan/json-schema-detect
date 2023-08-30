@@ -1,6 +1,6 @@
 package org.zhangyan.service;
 
-import static org.zhangyan.constant.SchemaDetectConstant.BLANCK_STRING;
+import static org.zhangyan.constant.DataTrackConstant.BLANCK_STRING;
 
 import java.io.IOException;
 import java.util.ArrayList;

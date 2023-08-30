@@ -1,8 +1,8 @@
 package org.zhangyan.data;
 
 
-import static org.zhangyan.constant.SchemaDetectConstant.BLANCK_STRING;
-import static org.zhangyan.constant.SchemaDetectConstant.ILLEGAL_ID;
+import static org.zhangyan.constant.DataTrackConstant.BLANCK_STRING;
+import static org.zhangyan.constant.DataTrackConstant.ILLEGAL_ID;
 
 public class StructTreeNodeDO {
     private Long id = ILLEGAL_ID;

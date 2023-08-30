@@ -1,7 +1,7 @@
 package org.zhangyan.service;
 
 
-import static org.zhangyan.constant.SchemaDetectConstant.ILLEGAL_ID;
+import static org.zhangyan.constant.DataTrackConstant.ILLEGAL_ID;
 
 import java.io.IOException;
 import java.util.ArrayList;
