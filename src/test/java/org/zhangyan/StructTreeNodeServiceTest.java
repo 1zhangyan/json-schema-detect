@@ -18,6 +18,9 @@ import org.zhangyan.service.StructTreeNodeService;
 public class StructTreeNodeServiceTest {
     private static final Logger LOG =  LoggerFactory.getLogger(StructTreeNodeServiceTest.class);
 
+    private static String exampleStr= "{\"layer1-3\":122.2,\"layer1-2\":[\"test1\",\"test2\"],\"layer1-1\":{\"layer2-2\":\"steam\",\"layer2-1\":\"wegame\"},\"layer1-5\":278.222}";
+
+
     @Autowired
     private StructTreeNodeService structTreeNodeService;
 
@@ -77,5 +80,11 @@ public class StructTreeNodeServiceTest {
         nodeList.add(tree4);
         StructTreeNode endNode = nodeMergeService.mergeNodesWithSameKey(nodeList);
         LOG.info(structTreeNodeService.generateSchemaStr(endNode));
+    }
+
+    @Test
+    public void testRealData() {
+        StructTreeNode tree1= structTreeNodeService.generateTreeFromJsonExample("tree",exampleStr);
+        LOG.info(structTreeNodeService.generateSchemaStr(tree1));
     }
 }

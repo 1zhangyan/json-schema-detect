@@ -1,5 +1,6 @@
 package org.zhangyan.service;
 
+import static com.fasterxml.jackson.databind.node.JsonNodeType.STRING;
 import static org.zhangyan.constant.DataTrackConstant.BLANCK_STRING;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ import org.zhangyan.data.StructTreeNodeDO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import springfox.documentation.spring.web.json.Json;
 
 @Service
 public class StructTreeNodeServiceImpl implements  StructTreeNodeService{
@@ -126,7 +128,7 @@ public class StructTreeNodeServiceImpl implements  StructTreeNodeService{
                     structTreeNode.setExampleJsonStr(exampleJsonStr);
                 }
             } catch (IOException exception) {
-                LOG.error("",exception);
+                LOG.debug("Can not deal struct，path is {},  element is {}",structName, exampleJsonStr);
             }
         }
         return structTreeNode;
@@ -180,10 +182,22 @@ public class StructTreeNodeServiceImpl implements  StructTreeNodeService{
             jsonNode.get(FIST_ELEMENT);
             StructTreeNode child = generateTreeNode(LIST_KEY, jsonNode.get(0), currentPath, true);
             treeNode.setChildren(Collections.singletonList(child));
-        } else if (jsonNode.isValueNode()) {
-            //
-        }
-        if (treeNode.getChildren() != null) {
+        } else if (jsonNode.getNodeType() == STRING) {
+            try {
+                StructTreeNode childNode = generateTreeFromJsonExample(treeNode.getPath(), jsonNode.asText());
+                if (childNode != null) {
+                    treeNode.setType(childNode.getType());
+                    if (childNode.getType().equals(StructTreeNode.DataType.MAP)) {
+                        treeNode.setChildren(childNode.getChildren());
+                    }
+                    if (childNode.getType().equals(StructTreeNode.DataType.LIST)) {
+                        treeNode.setChildren(childNode.getChildren());
+                    }
+                }
+            } catch (Exception e) {
+              LOG.debug("value element will not be deal with");
+            }
+        } if (treeNode.getChildren() != null) {
             Collections.sort(treeNode.getChildren());
         }
         return treeNode;
