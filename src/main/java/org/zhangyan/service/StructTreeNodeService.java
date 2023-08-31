@@ -7,7 +7,7 @@ public interface StructTreeNodeService {
     StructTreeNode upsertWithChildren(StructTreeNode structTreeNode);
     void update(StructTreeNode structTreeNode);
     String generateSchemaStr(StructTreeNode node);
-    StructTreeNode generateTreeFromJsonExample(String path, String exampleJsonStr);
+    StructTreeNode generateTreeFromJsonExample(String path, String exampleJsonStr, boolean withExample);
     boolean equals(StructTreeNode structTreeNodeA, StructTreeNode structTreeNodeB);
     StructTreeNode getByPath(String path);
 }

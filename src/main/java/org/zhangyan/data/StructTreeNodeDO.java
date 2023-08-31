@@ -10,7 +10,7 @@ public class StructTreeNodeDO {
     private String type = BLANCK_STRING;
     private String path = BLANCK_STRING;
     private boolean inList = false;
-    private boolean uncertainType = false;
+    private boolean certainType = false;
     private String childrenIds = BLANCK_STRING;
     private String allNodeContains = BLANCK_STRING;
     private String exampleJsonStr = BLANCK_STRING;
@@ -48,12 +48,12 @@ public class StructTreeNodeDO {
         this.inList = inList;
     }
 
-    public boolean isUncertainType() {
-        return uncertainType;
+    public boolean isCertainType() {
+        return certainType;
     }
 
-    public void setUncertainType(boolean uncertainType) {
-        this.uncertainType = uncertainType;
+    public void setCertainType(boolean certainType) {
+        this.certainType = certainType;
     }
 
     public String getType() {

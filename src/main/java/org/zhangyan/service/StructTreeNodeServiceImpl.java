@@ -71,7 +71,7 @@ public class StructTreeNodeServiceImpl implements  StructTreeNodeService{
             structTreeNodeDO.setKey(structTreeNode.getKey());
             structTreeNodeDO.setPath(structTreeNode.getPath());
             structTreeNodeDO.setInList(structTreeNode.isInList());
-            structTreeNodeDO.setUncertainType(structTreeNode.isUncertainType());
+            structTreeNodeDO.setCertainType(structTreeNode.isCertainType());
             structTreeNodeDO.setAllNodeContains(objectMapper.writeValueAsString(allNodeIds));
             Long id = Long.valueOf(structTreeNodeDao.upsert(structTreeNodeDO));
             structTreeNode.setId(id);
@@ -115,14 +115,14 @@ public class StructTreeNodeServiceImpl implements  StructTreeNodeService{
         return schemaStr;
     }
     @Override
-    public StructTreeNode generateTreeFromJsonExample(String structName, String exampleJsonStr) {
+    public StructTreeNode generateTreeFromJsonExample(String structName, String exampleJsonStr, boolean withExample) {
         StructTreeNode structTreeNode = null;
 
         if (!StringUtils.isEmpty(exampleJsonStr) && !StringUtils.isEmpty(structName)) {
             try {
                 ObjectMapper mapper = new ObjectMapper();
                 JsonNode jsonNode = mapper.readTree(exampleJsonStr);
-                structTreeNode = generateTreeNode(structName, jsonNode, BLANCK_STRING, false);
+                structTreeNode = generateTreeNode(structName, jsonNode, BLANCK_STRING, false, withExample);
                 if (null != structTreeNode) {
                     structTreeNode.setExampleJsonStr(exampleJsonStr);
                 }
@@ -153,13 +153,16 @@ public class StructTreeNodeServiceImpl implements  StructTreeNodeService{
         return nodeConvertService.convert(structTreeNodeDO);
     }
 
-    private StructTreeNode generateTreeNode(String key, JsonNode jsonNode, String parentPath, boolean isParentList) {
+    private StructTreeNode generateTreeNode(String key, JsonNode jsonNode, String parentPath, boolean isParentList, boolean withExample) {
         if (jsonNode == null) {
             return null;
         }
         StructTreeNode treeNode = new StructTreeNode(key);
         treeNode.setKey(key);
         treeNode.setType(jsonNode);
+        if (withExample) {
+            treeNode.setExampleJsonStr(jsonNode.asText());
+        }
         String currentPath = BLANCK_STRING;
         if (parentPath.equals(BLANCK_STRING)) {
             currentPath = key;
@@ -174,17 +177,17 @@ public class StructTreeNodeServiceImpl implements  StructTreeNodeService{
             Iterator<String> iterator = jsonNode.fieldNames();
             while (iterator.hasNext()) {
                 String field = iterator.next();
-                StructTreeNode child = generateTreeNode(field, jsonNode.get(field), currentPath, false);
+                StructTreeNode child = generateTreeNode(field, jsonNode.get(field), currentPath, false,withExample);
                 children.add(child);
             }
             treeNode.setChildren(children);
         } else if (jsonNode.isArray() && jsonNode.size() > 0) {
             jsonNode.get(FIST_ELEMENT);
-            StructTreeNode child = generateTreeNode(LIST_KEY, jsonNode.get(0), currentPath, true);
+            StructTreeNode child = generateTreeNode(LIST_KEY, jsonNode.get(0), currentPath, true, withExample);
             treeNode.setChildren(Collections.singletonList(child));
         } else if (jsonNode.getNodeType() == STRING) {
             try {
-                StructTreeNode childNode = generateTreeFromJsonExample(treeNode.getPath(), jsonNode.asText());
+                StructTreeNode childNode = generateTreeFromJsonExample(treeNode.getPath(), jsonNode.asText(),withExample);
                 if (childNode != null) {
                     treeNode.setType(childNode.getType());
                     if (childNode.getType().equals(StructTreeNode.DataType.MAP)) {

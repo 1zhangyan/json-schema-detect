@@ -86,10 +86,16 @@ public class NodeMergeService {
         treeNode.setInList(originNode.isInList() || targetNode.isInList());
         treeNode.setId(originNode.getId() == ILLEGAL_ID ? targetNode.getId():originNode.getId());
         if (!originNode.getType().equals(targetNode.getType())) {
-            if (originNode.getType().isNumber() && targetNode.getType().isNumber()) {
+            if (originNode.isCertainType()) {
+                treeNode.setCertainType(true);
+                treeNode.setType(originNode.getType());
+            } else if (targetNode.isCertainType()) {
+                treeNode.setCertainType(true);
+                treeNode.setType(targetNode.getType());
+            } else if (originNode.getType().isNumber() && targetNode.getType().isNumber()) {
                 treeNode.setType(mergeNumberDataType(originNode.getType(), targetNode.getType()));
             } else {
-                treeNode.setUncertainType(true);
+                treeNode.setType(StructTreeNode.DataType.UNKNOWN);
             }
         }
         treeNode.setChildren(mergeChildren(originNode.getChildren(), targetNode.getChildren()));

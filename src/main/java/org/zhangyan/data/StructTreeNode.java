@@ -17,7 +17,7 @@ public class StructTreeNode implements Comparable {
     private DataType type = DataType.UNKNOWN;
     private String path = BLANCK_STRING;
     private boolean inList = false;
-    private boolean uncertainType = false;
+    private boolean certainType = false;
     private List<StructTreeNode> children = Collections.emptyList();
     private String exampleJsonStr = BLANCK_STRING;
     private List<Long> childrenIds = Collections.emptyList();
@@ -99,12 +99,12 @@ public class StructTreeNode implements Comparable {
         throw new RuntimeException("Not StructTreeNode Class can not compare!");
     }
 
-    public boolean isUncertainType() {
-        return uncertainType;
+    public boolean isCertainType() {
+        return certainType;
     }
 
-    public void setUncertainType(boolean uncertainType) {
-        this.uncertainType = uncertainType;
+    public void setCertainType(boolean certainType) {
+        this.certainType = certainType;
     }
 
     public Long getId() {
