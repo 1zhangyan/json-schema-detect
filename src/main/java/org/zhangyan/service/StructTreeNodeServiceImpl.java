@@ -19,7 +19,6 @@ import org.zhangyan.data.StructTreeNodeDO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import springfox.documentation.spring.web.json.Json;
 
 @Service
 public class StructTreeNodeServiceImpl implements  StructTreeNodeService{
@@ -169,6 +168,7 @@ public class StructTreeNodeServiceImpl implements  StructTreeNodeService{
         }
         treeNode.setPath(currentPath);
         treeNode.setInList(isParentList);
+        treeNode.setExampleJsonStr(jsonNode.asText());
         if (jsonNode.isObject()) {
             List<StructTreeNode> children = new ArrayList<>();
             Iterator<String> iterator = jsonNode.fieldNames();
